@@ -105,10 +105,12 @@ async def mcp_router(request: Request):
     try:
         body = await request.json()
     except Exception:
+        print("[MCP] Failed to parse request body", flush=True)
         return {"jsonrpc": "2.0", "error": {"code": -32700, "message": "Parse error"}}
 
     method = body.get("method")
     request_id = body.get("id")
+    print(f"[MCP] method={method} id={request_id}", flush=True)
 
     if request_id is None and method and method.startswith("notifications/"):
         return Response(status_code=204)
