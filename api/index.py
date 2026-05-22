@@ -132,7 +132,7 @@ async def mcp_router(request: Request):
                 "resources": [{
                     "uri": "ui://widget/earthquakes.html",
                     "name": "Earthquakes Widget",
-                    "mimeType": "text/html+skybridge"
+                    "mimeType": "text/html;profile=mcp-app"
                 }]
             }
         }
@@ -145,7 +145,7 @@ async def mcp_router(request: Request):
                 "jsonrpc": "2.0", "id": request_id,
                 "result": {
                     "contents": [{
-                        "uri": uri, "mimeType": "text/html+skybridge", "text": HTML_WIDGET
+                        "uri": uri, "mimeType": "text/html;profile=mcp-app", "text": HTML_WIDGET
                     }]
                 }
             }
@@ -168,7 +168,9 @@ async def mcp_router(request: Request):
                         "required": ["start_date", "end_date", "min_magnitude"]
                     },
                     "_meta": {
-                        "openai/outputTemplate": "ui://widget/earthquakes.html"
+                        "ui": {
+                            "resourceUri": "ui://widget/earthquakes.html"
+                        }
                     }
                 }]
             }
