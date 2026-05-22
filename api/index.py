@@ -210,12 +210,15 @@ async def mcp_router(request: Request):
                 earthquakes = []
                 output_text = "Connection failure"
 
-            # structuredContent is the key! This is what gets passed to window.openai.toolOutput
+            # structuredContent is the key, but we MUST force the UI template in _meta!
             return {
                 "jsonrpc": "2.0", "id": request_id,
                 "result": {
                     "content": [{"type": "text", "text": output_text}],
-                    "structuredContent": {"earthquakes": earthquakes}
+                    "structuredContent": {"earthquakes": earthquakes},
+                    "_meta": {
+                        "openai/outputTemplate": "ui://widget/earthquakes.html"
+                    }
                 }
             }
 
