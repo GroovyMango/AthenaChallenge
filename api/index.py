@@ -27,7 +27,7 @@ HTML_WIDGET = """<!DOCTYPE html>
   <div class="card">
     <div style="margin-bottom: 16px;">
       <button id="sort-btn">Sort by Magnitude</button>
-      <button id="filter-btn" class="outline">Filter: Shallow (<70km)</button>
+      <button id="filter-btn" class="outline">Filter: Shallow (&lt;70km)</button>
     </div>
     <table id="eq-table">
       <thead><tr><th>Location</th><th>Magnitude</th><th>Depth (km)</th></tr></thead>
@@ -74,7 +74,7 @@ HTML_WIDGET = """<!DOCTYPE html>
       } else {
         currentData = [...originalData];
         if (isSorted) currentData.sort((a, b) => b.magnitude - a.magnitude);
-        filterBtn.textContent = "Filter: Shallow (<70km)";
+        filterBtn.textContent = "Filter: Shallow (&lt;70km)";
       }
       render();
     });
@@ -147,7 +147,12 @@ async def mcp_router(request: Request):
                 "jsonrpc": "2.0", "id": request_id,
                 "result": {
                     "contents": [{
-                        "uri": uri, "mimeType": "text/html+skybridge", "text": HTML_WIDGET
+                        "uri": uri, 
+                        "mimeType": "text/html+skybridge", 
+                        "text": HTML_WIDGET,
+                        "_meta": {
+                            "openai/widgetPrefersBorder": True
+                        }
                     }]
                 }
             }
@@ -170,7 +175,9 @@ async def mcp_router(request: Request):
                         "required": ["start_date", "end_date", "min_magnitude"]
                     },
                     "_meta": {
-                        "openai/outputTemplate": "ui://widget/earthquakes.html"
+                        "openai/outputTemplate": "ui://widget/earthquakes.html",
+                        "openai/toolInvocation/invoking": "Fetching earthquakes",
+                        "openai/toolInvocation/invoked": "Fetched earthquakes"
                     }
                 }]
             }
